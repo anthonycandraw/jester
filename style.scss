@@ -1,0 +1,136 @@
+$black: #333;
+$gray-lt: #dfdfdf;
+$white: #fff;
+
+$score: #14c07b;
+$scoreBg: #fff;
+
+$disp-tblt: 768px;
+
+@mixin cardShadow($property) {
+  -webkit-box-shadow: $property;
+          box-shadow: $property;
+}
+
+@mixin flex {
+  -webkit-display: flex;
+          display: flex;
+}
+
+@mixin transform($property) {
+  -webkit-transform: $property;
+     -moz-transform: $property;
+          transform: $property;
+}
+
+@mixin transition($property) {
+  -webkit-transition: $property;
+     -moz-transition: $property;
+       -o-transition: $property;
+          transition: $property;
+}
+
+* {
+  box-sizing: border-box;
+  color: $black;
+  font-family: sans-serif;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+}
+
+.jester {
+  @include cardShadow(0 24px 48px -24px rgba(0, 0, 0, .32));
+  @include flex;
+  align-items: center;
+  background: $white;
+  border-radius: 8px;
+  flex-direction: column;
+  max-height: calc(100vh - 64px);
+  min-height: 320px;
+  min-width: 320px;
+  padding: 24px;
+  position: relative;
+
+  @media screen and (min-width: $disp-tblt) {
+    max-width: 400px;
+    min-width: 400px;
+    padding: 32px;
+  }
+}
+
+.jester__controls {
+  margin: 24px 0 0;
+  width: 100%;
+}
+
+.jester__controls__select {
+  height: 48px;
+  font-size: 16px;
+  margin-bottom: 8px;
+  width: 100%;
+
+  &:disabled {
+    cursor: pointer;
+    opacity: .24;
+    pointer-events: none;
+  }
+}
+
+.jester__title {
+  color: #ccc;
+  font-size: 13px;
+  letter-spacing: .03em;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.jester__score {
+  @include cardShadow(0 16px 32px -24px rgba(0, 0, 0, .8));
+  @include transform(translate3d(0, -50%, 0));
+  background-color: $scoreBg;
+  border-radius: 40px;
+  overflow: hidden;
+  padding: 16px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 200px;
+}
+
+.jester__score__color {
+  @include transform(translate3d(-100%, 0, 0));
+  @include transition(transform .5s cubic-bezier(0.76,-0.6, 0.15, 1.59));
+  background: $score;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  opacity: 1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+}
+
+.jester__score__number {
+  display: block;
+  font-size: 32px;
+  font-weight: 800;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  z-index: 8;
+}
+
+.wrapper {
+  @include flex;
+  align-items: center;
+  background: $gray-lt;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
