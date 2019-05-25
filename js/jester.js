@@ -1,48 +1,48 @@
 const traits = {
   userLevel: {
-    'tied_to_customer': false,
-    'Nomad': 0.0,
-    'Member': 1.0,
-    'Pro': 2.0,
-    'Customer': 2.0
+    "tied_to_customer": false,
+    "Nomad": 0.0,
+    "Member": 1.0,
+    "Pro": 2.0,
+    "Customer": 2.0
   },
   customerLevel: {
-    'tied_to_customer': true,
-    'Personal': 0.0,
-    'BizLow': 1.5,
-    'BizHigh': 3.0
+    "tied_to_customer": true,
+    "Personal": 0.0,
+    "BizLow": 1.5,
+    "BizHigh": 3.0
   },
   experienceLevel: {
-    'tied_to_customer': false,
-    'Novice': 0.0,
-    'Apprentice': 1.5,
-    'Veteran': 3.0,
+    "tied_to_customer": false,
+    "Novice": 0.0,
+    "Apprentice": 1.5,
+    "Veteran": 3.0,
   },
   questionsAnswered: {
-    'tied_to_customer': false,
-    'No questions answered': 0.0,
-    'A few questions answered': 2.0,
-    'A lot of questions answered': 3.5,
-    'A flood of questions answered': 4.0
+    "tied_to_customer": false,
+    "No questions answered": 0.0,
+    "A few questions answered": 2.0,
+    "A lot of questions answered": 3.5,
+    "A flood of questions answered": 4.0
   },
   lifetimeValue: {
-    'tied_to_customer': true,
-    'Low value': 0.0,
-    'Med value': 2.0,
-    'High value': 4.0,
-    'Extremely high value': 8.0
+    "tied_to_customer": true,
+    "Low value": 0.0,
+    "Med value": 2.0,
+    "High value": 4.0,
+    "Extremely high value": 8.0
   },
-  ticketSubmissionDate: {
-    'tied_to_customer': false,
-    'Less than 24 hours': 0.0,
-    'Over 24 hours': 4.0,
-    'Over 48 hours': 6.0,
-    'Over 72 hours': 10.0
-  },
+  // ticketSubmissionDate: {
+  //   "tied_to_customer": false,
+  //   "Less than 24 hours": 0.0,
+  //   "Over 24 hours": 4.0,
+  //   "Over 48 hours": 6.0,
+  //   "Over 72 hours": 10.0
+  // },
   // accountStanding: {
-  //   'tied_to_customer': true,
-  //   'Account in poor standing': 0.0,
-  //   'Account in good standing': 3.0
+  //   "tied_to_customer": true,
+  //   "Account in poor standing": 0.0,
+  //   "Account in good standing": 3.0
   // }
 }
 
@@ -147,6 +147,8 @@ function scoring() {
   // Loop through traits for individual keys.
   for (let trait in traits) {
 
+    // Run the controlDisable function,
+    // pass in the 'trait' value
     controlDisable(trait);
 
     // Loop through keys for nested keys.
