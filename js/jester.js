@@ -32,6 +32,13 @@ const traits = {
     'High value': 4.0,
     'Extremely high value': 8.0
   },
+  ticketSubmissionDate: {
+    'tied_to_customer': false,
+    'Less than 24 hours': 0.0,
+    'Over 24 hours': 4.0,
+    'Over 48 hours': 6.0,
+    'Over 72 hours': 10.0
+  },
   // accountStanding: {
   //   'tied_to_customer': true,
   //   'Account in poor standing': 0.0,
