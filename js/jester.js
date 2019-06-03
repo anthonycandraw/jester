@@ -1,47 +1,91 @@
 const traits = {
   userLevel: {
-    'tied_to_customer': false,
-    'Nomad': 0.0,
-    'Member': 1.0,
-    'Pro': 2.0,
-    'Customer': 2.0
+    "tied_to_customer": false,
+    "Nomad": 0.0,
+    "Member": 1.0,
+    "Pro": 2.0,
+    "Customer": 2.0
   },
   customerLevel: {
-    'tied_to_customer': true,
-    'Personal': 0.0,
-    'BizLow': 1.5,
-    'BizHigh': 3.0
+    "tied_to_customer": true,
+    "Personal": 0.0,
+    "BizLow": 1.5,
+    "BizHigh": 3.0
   },
   experienceLevel: {
-    'tied_to_customer': false,
-    'Novice': 0.0,
-    'Apprentice': 1.5,
-    'Veteran': 3.0,
+    "tied_to_customer": false,
+    "Novice": 0.0,
+    "Apprentice": 1.5,
+    "Veteran": 3.0,
   },
   questionsAnswered: {
-    'tied_to_customer': false,
-    'No questions answered': 0.0,
-    'A few questions answered': 2.0,
-    'A lot of questions answered': 3.5,
-    'A flood of questions answered': 4.0
+    "tied_to_customer": false,
+    "No questions answered": 0.0,
+    "A few questions answered": 2.0,
+    "A lot of questions answered": 3.5,
+    "A flood of questions answered": 4.0
   },
   lifetimeValue: {
-    'tied_to_customer': true,
-    'Low value': 0.0,
-    'Med value': 2.0,
-    'High value': 4.0,
-    'Extremely high value': 8.0
+    "tied_to_customer": true,
+    "Low value": 0.0,
+    "Med value": 2.0,
+    "High value": 4.0,
+    "Extremely high value": 8.0
   },
   // accountStanding: {
-  //   'tied_to_customer': true,
-  //   'Account in poor standing': 0.0,
-  //   'Account in good standing': 3.0
+  //   "tied_to_customer": true,
+  //   "Account in poor standing": 0.0,
+  //   "Account in good standing": 3.0
   // }
+}
+
+const answerScores = {
+  question_1: {
+    "answers_counted": 24,
+    "comments_counted": 12,
+    "datetime": "2012-04-23T18:25:43.511Z",
+    "message": "This is another test.",
+    "question": "This is a test.",
+    "user_id": "8da30ced-4fe1-4abd-b188-7a67d295422b",
+    "views_counted": 18,
+    "votes_counted": 4,
+  },
+  question_2: {
+    "answers_counted": 24,
+    "comments_counted": 12,
+    "datetime": "2012-04-23T18:25:43.511Z",
+    "message": "This is another test.",
+    "question": "This is a test.",
+    "user_id": "8da30ced-4fe1-4abd-b188-7a67d295422b",
+    "views_counted": 18,
+    "votes_counted": 4,
+  },
+  question_3: {
+    "answers_counted": 24,
+    "comments_counted": 12,
+    "datetime": "2012-04-23T18:25:43.511Z",
+    "message": "This is another test.",
+    "question": "This is a test.",
+    "user_id": "8da30ced-4fe1-4abd-b188-7a67d295422b",
+    "views_counted": 18,
+    "votes_counted": 4,
+  }
 }
 
 // Creates the UI select controls based on keys of traits Object.
 // Selected options of the select controls will adjust the score.
 function createControls() {
+  const selectSystem = document.createElement('select');
+  const selectSystemArr = ['User traits', 'Answer traits'];
+  
+  selectSystem.setAttribute('class', 'jester__system__select');
+  document.querySelector('.wrapper').appendChild(selectSystem);
+
+  for (var selectSystemCount = 0; selectSystemCount < selectSystemArr.length; selectSystemCount++) {
+    let selectSystemOption = document.createElement('option');
+    selectSystemOption.innerHTML = selectSystemArr[selectSystemCount];
+    selectSystem.appendChild(selectSystemOption);
+  }
 
   // Loop through keys of traits Object.
   for (let trait in traits) {
