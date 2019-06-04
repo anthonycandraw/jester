@@ -40,35 +40,32 @@ const traits = {
 }
 
 const answerScores = {
-  question_1: {
-    "answers_counted": 24,
-    "comments_counted": 12,
-    "datetime": "2012-04-23T18:25:43.511Z",
-    "message": "This is another test.",
-    "question": "This is a test.",
-    "user_id": "8da30ced-4fe1-4abd-b188-7a67d295422b",
-    "views_counted": 18,
-    "votes_counted": 4,
+  answers_counted: {
+    "0–9 answers": 1.0,
+    "10–49 answers": 2.0,
+    "50–100 answers": 3.0
   },
-  question_2: {
-    "answers_counted": 24,
-    "comments_counted": 12,
-    "datetime": "2012-04-23T18:25:43.511Z",
-    "message": "This is another test.",
-    "question": "This is a test.",
-    "user_id": "8da30ced-4fe1-4abd-b188-7a67d295422b",
-    "views_counted": 18,
-    "votes_counted": 4,
+  comments_counted: {
+    "0-9 comments": 1.0,
+    "10–49 comments": 2.0,
+    "50–100 comments": 4.0
   },
-  question_3: {
-    "answers_counted": 24,
-    "comments_counted": 12,
-    "datetime": "2012-04-23T18:25:43.511Z",
-    "message": "This is another test.",
-    "question": "This is a test.",
-    "user_id": "8da30ced-4fe1-4abd-b188-7a67d295422b",
-    "views_counted": 18,
-    "votes_counted": 4,
+  time_elapsed: {
+    "0–24 hours": 4.0,
+    "1 to 2 days": 3.0,
+    "2 days to one week": 2.0,
+    "One week to two months": 1.0,
+    "Two months to infinity": 0.5
+  },
+  views_counted: {
+    "0-9 comments": 1.0,
+    "10–49 comments": 2.0,
+    "50–100 comments": 4.0
+  },
+  votes_counted: {
+    "0-9 votes": 2.0,
+    "10–49 votes": 4.0,
+    "50–100 votes": 8.0
   }
 }
 
@@ -76,19 +73,41 @@ const answerScores = {
 // Selected options of the select controls will adjust the score.
 function createControls() {
   const selectSystem = document.createElement('select');
-  const selectSystemArr = ['User traits', 'Answer traits'];
+  const selectSystemArr = [['User traits', traits], ['Answer traits', answerScores]];
   
   selectSystem.setAttribute('class', 'jester__system__select');
   document.querySelector('.wrapper').appendChild(selectSystem);
 
   for (var selectSystemCount = 0; selectSystemCount < selectSystemArr.length; selectSystemCount++) {
     let selectSystemOption = document.createElement('option');
-    selectSystemOption.innerHTML = selectSystemArr[selectSystemCount];
+    selectSystemOption.innerHTML = selectSystemArr[selectSystemCount][0];
     selectSystem.appendChild(selectSystemOption);
   }
 
-  // Loop through keys of traits Object.
-  for (let trait in traits) {
+  changeSystem(selectSystemArr);
+}
+
+function changeSystem(arr) {
+  const systemSelected = document.querySelector('.jester__system__select').value;
+
+  for (let arrValue in arr) {
+    if (systemSelected === arr[arrValue][0]) {
+      controlsCreate(arr[arrValue][1]);
+      scoring(arr[arrValue][1]);
+    }
+  }
+}
+
+function controlsCreate(system) {
+
+  // Remove all select dropdown boxes in
+  // the controls view.
+  let controls = document.getElementById('controls');
+  while (controls.firstChild) {
+    controls.removeChild(controls.firstChild);
+  }
+
+  for (let key in system) {
 
     // Create an element based 
     // on keys of traits Object.
@@ -96,18 +115,18 @@ function createControls() {
 
     // Apply class and IDs to elements created.
     selectElement.setAttribute('class', 'jester__controls__select');
-    selectElement.setAttribute('id', trait);
+    selectElement.setAttribute('id', key);
 
     // Append new element to the form.
     document.getElementById('controls').appendChild(selectElement);
 
-    for (let i = 0; i < Object.keys(traits[trait]).length; i++) {
+    for (let i = 0; i < Object.keys(system[key]).length; i++) {
 
       // Create a option value from a nested key except
       // the 'tied_to_customer' nested key of each parent key.
-      if (Object.keys(traits[trait])[i] != 'tied_to_customer') {
+      if (Object.keys(system[key])[i] != 'tied_to_customer') {
         let optionElement = document.createElement('option');
-        let specTrait = Object.keys(traits[trait])[i];
+        let specTrait = Object.keys(system[key])[i];
 
         optionElement.setAttribute('value', specTrait);
         optionElement.innerHTML = specTrait;
@@ -119,109 +138,91 @@ function createControls() {
 
 // Disable specific controls based
 // on criteria determined below.
-function controlDisable(controlName) {
+function controlDisable(controlName, systemName) {
 
-  if (controlName != 'userLevel' && document.getElementById('userLevel').value == 'Nomad') {
-    document.getElementById(controlName).disabled = true;
-  }
-  else if (traits[controlName].tied_to_customer == true && document.getElementById('userLevel').value == 'Customer') {
-    document.getElementById(controlName).disabled = false;
-  }
-  else if (traits[controlName].tied_to_customer == true && document.getElementById('userLevel').value != 'Customer') {
-    document.getElementById(controlName).disabled = true;
-  }
-  else {
-    document.getElementById(controlName).disabled = false;
-  }
-}
+  if (document.querySelector('.jester__system__select').value == 'User traits') {
 
-// Function for finding the maximum score
-// for each nested key.
-function findMaxTraitScore(maxScore) {
-  for (let trait in traits) {
-    let traitLength = Object.keys(traits[trait]).length;
-    let traitScoreArr = [];
-
-    for (var traitValue = 0; traitValue < traitLength; traitValue++) {
-      if (Number.isInteger(Object.values(traits[trait])[traitValue])) {
-        traitScoreArr.push(Number(Object.values(traits[trait])[traitValue]));
-      }
+    if (controlName != 'userLevel' && document.getElementById('userLevel').value == 'Nomad') {
+      document.getElementById(controlName).disabled = true;
     }
-
-    traitScoreArr.sort();
-    maxScore += Number(traitScoreArr[traitScoreArr.length - 1].toFixed(2));
-
+    else if (traits[controlName].tied_to_customer == true && document.getElementById('userLevel').value == 'Customer') {
+      document.getElementById(controlName).disabled = false;
+    }
+    else if (traits[controlName].tied_to_customer == true && document.getElementById('userLevel').value != 'Customer') {
+      document.getElementById(controlName).disabled = true;
+    }
+    else {
+      document.getElementById(controlName).disabled = false;
+    }
   }
-
-  return maxScore;
-
-}
-
-// Calculates the total sum
-// of all scores.
-function scoreUpdate(score) {
-  const background = document.querySelector('.jester__score__color');
-  const scoreElement = document.querySelector('.jester__score__number');
-
-  // Create max score.
-  let maxScore = 0;
-  maxScore = findMaxTraitScore(maxScore);
-
-  // Move the score progress bar
-  // based on the summed scores.
-  background.style.transform = 'translate3d(' + (-100 + (score / maxScore * 100)) + '%, 0, 0)';
-
-  // Updates the score string
-  // and display as a percentage.
-  scoreElement.innerHTML = ((score / maxScore) * 100).toFixed(2) + '%';
 }
 
 // Generates a score based on which controls are enabled
 // and the individual scores of selected options.
-function scoring() {
+function scoring(system) {
+  const background = document.querySelector('.jester__score__color');
+  const scoreElement = document.querySelector('.jester__score__number');
   let sum = 0;
+  let maxScore = 0;
+  let systemArr = [];
 
   // Loop through traits for individual keys.
-  for (let trait in traits) {
+  for (let key in system) {
 
-    controlDisable(trait);
+    controlDisable(key, system);
 
-    // Loop through keys for nested keys.
-    for (let i = 0; i < Object.keys(traits[trait]).length; i++) {
+    let systemKey = Object.keys(system[key]);
+    let systemValue = Object.values(system[key]);
 
-      // If: the nested key is equal to the current value of the dropdown.
-      if (Object.keys(traits[trait])[i] === document.getElementById(trait).value) {
+    for (let systemKeyValue in systemKey) {
 
-        // If: the dropdown meny is disabled.
-        if (document.getElementById(trait).disabled == true) {
-          // Add zero to the total sum
-          // if the dropdown value is disabled.
-          sum += 0;
-        }
-        else {
-          // Add the score of the enabled
-          // dropdown to the total sum.
-          sum += Object.values(traits[trait])[i];
-        }
+      // Add up scores of select boxes that are enabled and selected
+      if (systemKey[systemKeyValue] === document.getElementById(key).value && !document.getElementById(key).disabled) {
+        sum += systemValue[systemKeyValue];
+      }
+      else {
+        sum += 0;
+      }
+
+      if (Number.isInteger(systemValue[systemKeyValue])) {
+        systemArr.push(Number(systemValue[systemKeyValue]));
       }
     }
+
+    systemArr.sort();
+    maxScore += Number(systemArr[systemArr.length - 1].toFixed(2));
+
+    // console.log('Your sum is ' + sum + ' out of ' + maxScore);
+
   }
 
-  // Run scoreUpdate function, 
-  // pass through the total sum.
-  scoreUpdate(sum);
+  // Move the score progress bar
+  // based on the summed scores.
+  background.style.transform = 'translate3d(' + (-100 + (sum / maxScore * 100)) + '%, 0, 0)';
+
+  // Updates the score string
+  // and display as a percentage.
+  scoreElement.innerHTML = ((sum / maxScore) * 100).toFixed(2) + '%';
 
 }
-
-// Listen for changes to form and 
-// run the contained function(s).
-document.getElementById('controls').addEventListener('change', function() {
-  scoring();
-});
 
 // On load of the page, run 
 // the contained function(s).
 window.onload = function() {
   createControls();
-  scoring();
+
+  document.querySelector('.jester__system__select').addEventListener('change', function() {
+    changeSystem();
+  });
+
+  // Listen for changes to form and 
+  // run the contained function(s).
+  document.getElementById('controls').addEventListener('change', function() {
+    if (document.querySelector('.jester__system__select').value === 'User traits') {
+      scoring(traits);
+    }
+    else {
+      scoring(answerScores);
+    }
+  });
 }
