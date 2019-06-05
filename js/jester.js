@@ -140,7 +140,7 @@ function createScoringControls(system) {
 
 // Disable specific controls based
 // on criteria determined below.
-function controlDisable(controlName, systemName) {
+function controlDisable(controlName) {
 
   if (document.querySelector('.jester__system__select').value == 'User traits') {
 
@@ -172,7 +172,7 @@ function scoring(system) {
   for (let key in system) {
 
     // Disable any controls, if needed.
-    controlDisable(key, system);
+    controlDisable(key);
 
     let systemKey = Object.keys(system[key]);
     let systemValue = Object.values(system[key]);
