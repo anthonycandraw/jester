@@ -70,22 +70,7 @@ const answerScores = {
   },
 }
 
-const featureScores = {
-  droplets_total: {
-    "Zero droplets": 0.0,
-    "1-2 droplets": 2.0,
-    "3-10 droplets": 4.0,
-    "11–20 droplets": 8.0,
-    "20+ droplets": 12.0
-  },
-  floatingIps_total: {
-    "Zero floating IPs": 0.0,
-    "1 floating IP": 2.0,
-    "2 floating IPs": 8.0
-  },
-}
-
-const selectSystemArr = [['User traits', traits], ['Answer traits', answerScores], ['Features owned', featureScores]];
+const selectSystemArr = [['User traits', traits], ['Answer traits', answerScores]];
 
 // Creates the UI select controls based on keys of traits Object.
 // Selected options of the select controls will adjust the score.
