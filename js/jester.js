@@ -51,30 +51,32 @@ const answerScores = {
     "50–100 comments": 4.0
   },
   time_elapsed: {
-    "0–24 hours": 4.0,
-    "1 to 2 days": 3.0,
-    "2 days to one week": 2.0,
+    "Two months to infinity": 0.5,
     "One week to two months": 1.0,
-    "Two months to infinity": 0.5
+    "2 days to one week": 2.0,
+    "1 to 2 days": 3.0,
+    "0–24 hours": 4.0
   },
   views_counted: {
-    "0-9 comments": 1.0,
-    "10–49 comments": 2.0,
-    "50–100 comments": 4.0
+    "0-9 views": 3.0,
+    "10–49 views": 6.0,
+    "50–100 views": 12.0,
+    "100 to infinite views": 16.0
   },
   votes_counted: {
     "0-9 votes": 2.0,
     "10–49 votes": 4.0,
     "50–100 votes": 8.0
-  }
+  },
 }
+
+const selectSystemArr = [['User traits', traits], ['Answer traits', answerScores]];
 
 // Creates the UI select controls based on keys of traits Object.
 // Selected options of the select controls will adjust the score.
-function createControls() {
+function createSystemControls() {
   const selectSystem = document.createElement('select');
-  const selectSystemArr = [['User traits', traits], ['Answer traits', answerScores]];
-  
+
   selectSystem.setAttribute('class', 'jester__system__select');
   document.querySelector('.wrapper').appendChild(selectSystem);
 
@@ -92,13 +94,13 @@ function changeSystem(arr) {
 
   for (let arrValue in arr) {
     if (systemSelected === arr[arrValue][0]) {
-      controlsCreate(arr[arrValue][1]);
+      createScoringControls(arr[arrValue][1]);
       scoring(arr[arrValue][1]);
     }
   }
 }
 
-function controlsCreate(system) {
+function createScoringControls(system) {
 
   // Remove all select dropdown boxes in
   // the controls view.
@@ -169,6 +171,7 @@ function scoring(system) {
   // Loop through traits for individual keys.
   for (let key in system) {
 
+    // Disable any controls, if needed.
     controlDisable(key, system);
 
     let systemKey = Object.keys(system[key]);
@@ -184,16 +187,22 @@ function scoring(system) {
         sum += 0;
       }
 
+      // Push values to an array BEFORE sorting an pulling max integer.
       if (Number.isInteger(systemValue[systemKeyValue])) {
         systemArr.push(Number(systemValue[systemKeyValue]));
       }
     }
 
-    systemArr.sort();
+    // Sort integers in the array by least to greatest
+    systemArr.sort((a, b) => a - b);
+
+    // Add the max integer from each select element
+    // to the maximum score to determine the highest possible score.
     maxScore += Number(systemArr[systemArr.length - 1].toFixed(2));
 
-    // console.log('Your sum is ' + sum + ' out of ' + maxScore);
-
+    // Clear the array of values for the next loop,
+    // so you don't run into double-adding max scores from previous keys.
+    systemArr = [];
   }
 
   // Move the score progress bar
@@ -209,10 +218,10 @@ function scoring(system) {
 // On load of the page, run 
 // the contained function(s).
 window.onload = function() {
-  createControls();
+  createSystemControls();
 
   document.querySelector('.jester__system__select').addEventListener('change', function() {
-    changeSystem();
+    changeSystem(selectSystemArr);
   });
 
   // Listen for changes to form and 
