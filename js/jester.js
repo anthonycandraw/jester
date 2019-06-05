@@ -174,10 +174,14 @@ function scoring(system) {
     // Disable any controls, if needed.
     controlDisable(key);
 
+    console.log(key);
+
     let systemKey = Object.keys(system[key]);
     let systemValue = Object.values(system[key]);
 
     for (let systemKeyValue in systemKey) {
+
+      console.log(document.getElementById(key).value);
 
       // Add up scores of select boxes that are enabled and selected
       if (systemKey[systemKeyValue] === document.getElementById(key).value && !document.getElementById(key).disabled) {
@@ -227,11 +231,13 @@ window.onload = function() {
   // Listen for changes to form and 
   // run the contained function(s).
   document.getElementById('controls').addEventListener('change', function() {
-    if (document.querySelector('.jester__system__select').value === 'User traits') {
-      scoring(traits);
-    }
-    else {
-      scoring(answerScores);
+
+    // Loop through the selectSystemArr and run a new scoring system
+    // based on the select made by the User.
+    for (let controlChange in selectSystemArr) {
+      if (document.querySelector('.jester__system__select').value === selectSystemArr[controlChange][0]) {
+        scoring(selectSystemArr[controlChange][1]);
+      }
     }
   });
 }
